@@ -1,0 +1,115 @@
+getconf LONG_BIT 查看cpu位数
+uname -a         查看内核版本
+curl ifconfig.me 查看公网ip
+curl cip.cc      查看公网ip
+ifconfig -a      查看内网ip
+/usr/local/apache2/bin/apachectl start apache 启动apache
+/usr/local/apache2/bin/apachectl stop  
+/usr/local/apache2/bin/apachectl restart 
+/usr/local/sbin/apachectl graceful  要在重启 Apache 服务器时不中断当前的连接(有的linux会报错,百度)
+
+如果安装了服务
+service httpd start 
+service httpd stop 
+service httpd restart
+systemctl start firewalld 开启防火墙
+systemctl status firewalld 查看firewalld状态
+firewall-cmd --permanent --zone=public --add-port=8888/tcp 开放默认端口8888
+rm -f /var/run/yum.pid     杀掉yum进程
+
+tar -czvf test.tar.gz * --exclude c.log  压缩时排除某个文件
+rm -rf !(test.tar.gz)                    除了某个文件以外其他全部删除, 如果报错event not found运行shopt -s extglob
+mv  *  .[^.]*   移动
+
+--------------------------------------------------------redis------------------------------------------------------------
+redis-cli keys "qj_adm_auth_*" | xargs redis-cli del
+-------------------------------------------------------------------------------------------------------------------------
+
+查看内存
+grep MemTotal /proc/meminfo
+grep MemTotal /proc/meminfo | cut -f2 -d:
+-------------------------------------------------------------------------------------------------------------------------
+
+
+require-mppe-128 查看外网ip
+-------------------------------------------------------------------------------------------------------------------------
+
+
+//队列
+php queue.php PHP_Job
+php check_status.php 3c2bd3a67b1760b26f92884ef228a6d6(上一步得到的结果)
+QUEUE=* php demo/resque.php //查看查看运行数据(临时)
+QUEUE=default nohup php /var/www/resque/demo/resque.php > /root/resque.log & //查看运行数据并写日志(永久)
+注意php切换工作目录  getcwd();  chdir();
+-------------------------------------------------------------------------------------------------------------------------
+
+
+/////////////////////////////////////////守护进程开始//////////////////////////////////////////////////////////////////
+nohup /var/www/resque/demo/resque.sh >>/var/www/resque/demo/resque.sh.log 2>&1 &
+
+//resque.sh文件开始 (文件需要执行权限)
+#!/bin/sh
+PREFIX=/var/www/resque/demo
+INTERVAL=1
+QUEUE=default nohup php ${PREFIX}/resque.php >>${PREFIX}/resque.log 2>&1 & echo $! > ${PREFIX}/resque.pid
+while [ 1 ]; do
+    if [ ! -d /proc/`cat ${PREFIX}/resque.pid` ]; then
+        QUEUE=default nohup php ${PREFIX}/resque.php >>${PREFIX}/resque.log 2>&1 & echo $! > ${PREFIX}/resque.pid
+        echo 'NEW_PID:'`cat ${PREFIX}/resque.pid && date '+%Y-%m-%d %H:%M:%S'`
+    fi
+    sleep ${INTERVAL}
+done
+//resque.sh文件结束
+
+windows写的shell脚本，上传到linux运行出错
+解决方案：
+1.用vi命令打开文件
+2.在vi命令模式中使用 :set ff 命令
+3.命令：:set ff=unix
+4.wq保存
+////////////////////////////////////守护进程结束//////////////////////////////////////////////////////////////////
+----------------------------------------------------------------------------------------------------------------------
+
+
+阿里云服务器限制wifi连接
+vim /etc/sysctl.conf  --> net.ipv4.tcp_tw_recycle = 0
+----------------------------------------------------------------------------------------------------------------------
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+查看apache2的命令 httpd -V
+其中HTTPD_ROOT和SERVER_CONFIG_FILE  就可以确定httpd.conf的路径了
+
+假设当前Linux用户的apahce安装目录为/usr/local/apache2，那么在命令行终端中使用以下命令启动，停止和重启apache。
+1. 启动apahce的命令：
+/usr/local/apache2/bin/apachectl start apache
+2.  停止apache的命令：
+/usr/local/apache2/bin/apachectl stop  
+3.  重启apache的命令：
+/usr/local/apache2/bin/apachectl restart 
+要在重启 Apache 服务器时不中断当前的连接，则应运行：
+/usr/local/sbin/apachectl graceful
+
+如果当前用户的apache已经安装为linux的服务的话，可以使用以下命令进行以上操作。
+1. 启动apache
+service httpd start 
+2. 停止服务apache
+service httpd stop 
+3. 重新启动apache
+service httpd restart
+
+Linux系统为Ubuntu
+一、Start Apache 2 Server /启动apache服务
+# /etc/init.d/apache2 start
+or
+$ sudo /etc/init.d/apache2 start
+二、 Restart Apache 2 Server /重启apache服务
+# /etc/init.d/apache2 restart
+or
+$ sudo /etc/init.d/apache2 restart
+三、Stop Apache 2 Server /停止apache服务
+# /etc/init.d/apache2 stop
+or
+$ sudo /etc/init.d/apache2 stop
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+--------------------------------------------------------------------------------------------------------------------------
