@@ -1,0 +1,3 @@
+if (!preg_match("/^[a-zA-Z ]*$/",$str)) {
+  $error = "只允许字母和空格！"; 
+}

@@ -1,0 +1,22 @@
+//快速排序法
+function quickSort($arr) {
+	$len = count($arr);
+	if($len <= 1) {  
+        return $arr;  
+    }  
+	$baseNum = $arr[0];
+	$leftArr = [];
+	$rightArr = [];
+	for($i = 1; $i < $len; $i ++) {
+		if ($baseNum > $arr[$i]) {
+			$leftArr[] = $arr[$i];
+		} else {
+			$rightArr[] = $arr[$i];
+		}
+	}
+	$leftArr = quickSort($leftArr);
+	$rightArr = quickSort($rightArr);
+	return array_merge($leftArr, array($baseNum), $rightArr);
+}
+$arr = [1, 20, 3, 8, 11, 0, 16, -1, 20, 56, 2, 5];
+print_r(quickSort($arr));

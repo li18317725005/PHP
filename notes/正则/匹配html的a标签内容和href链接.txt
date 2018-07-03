@@ -1,0 +1,18 @@
+$str = <<<EOT
+<ul class="attr">
+    <li>
+        <a href="www.baidu.com">百度baidu</a>
+        <a href='www.tecent.com'>腾讯tengxun</a>
+        <a href="www.alibaba.com">阿里巴巴alibaba</a>
+    </li>
+</ul>
+EOT;
+$resultArr = [];
+$preg = '/<a href=[\'\"]?([^\'\" ]+).*?>/';
+preg_match_all($preg, $str, $hrefArr);
+$preg2 = '/>(.*)<\/a>/';
+preg_match_all($preg2, $str, $aArr);
+foreach($hrefArr[1] as $k => $v) {
+	$resultArr[$v] = $aArr[1][$k];
+}
+print_r($resultArr);

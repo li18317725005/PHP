@@ -1,0 +1,14 @@
+//冒泡法
+$arr = [1, 20, 3, 8, 11, 0, 16, -1, 20, 56, 2, 5];
+for ($i = 1; $i < count($arr); $i ++) {
+	for ($n = 0; $n < count($arr) - $i; $n ++) {
+		if ($arr[$n] > $arr[$n+1]) {
+			$num = $arr[$n];
+			$arr[$n] = $arr[$n+1];
+			$arr[$n+1] = $num;
+		}
+	}
+	print_r($arr);
+	echo "<br/>";
+}
+print_r($arr);

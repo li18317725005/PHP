@@ -1,0 +1,18 @@
+<?php
+/*
+*@return Boolen
+*@param String $ip 要匹配的ip地址
+*@param String $pat 匹配的正则规则
+*/
+function fun($ip){
+    //0.0.0.0--- 255.255.255.255
+    $pat = "/^(((1?\d{1,2})|(2[0-4]\d)|(25[0-5]))\.){3}((1?\d{1,2})|(2[0-4]\d)|(25[0-5]))$/";
+    //0为不成功，1为成功
+    $num = preg_match($pat,$ip);
+    if ($num){
+      return true;
+    }else{
+      return false;
+    }
+}
+var_dump(fun("127.255.255.2525"));

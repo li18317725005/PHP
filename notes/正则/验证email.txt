@@ -1,0 +1,3 @@
+if (!preg_match("/([\w\-]+\@[\w\-]+\.[\w\-]+)/",$email)) {
+  $error = "无效的 email 格式！"; 
+}

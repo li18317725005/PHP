@@ -1,0 +1,16 @@
+//猴子大王
+function king($m, $n) {
+	$arr = range(1,$n);
+	$i = 0;
+	while(count($arr) > 1) {
+		if (($i+1) % $m == 0) {
+			unset($arr[$i]);
+		} else {
+			array_push($arr, $arr[$i]);
+			unset($arr[$i]);
+		}
+		$i ++;
+	}
+	print_r($arr);
+}
+king(3, 7);

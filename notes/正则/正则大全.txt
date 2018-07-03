@@ -1,0 +1,98 @@
+1.邮箱验证
+
+
+1 $email='1515212@qq';
+2 $preg_email='/^[a-zA-Z0-9]+([-_.][a-zA-Z0-9]+)*@([a-zA-Z0-9]+[-.])+([a-z]{2,5})$/ims';
+3 if(preg_match($preg_email,$email)){
+4     echo 1;
+5 }else{
+6     echo 0;
+7 }
+
+2.验证手机号
+
+
+1 $phone='13651121610';
+2 $preg_phone='/^1[34578]\d{9}$/ims';
+3 if(preg_match($preg_phone,$phone)){
+4     echo 1;
+5 }else{
+6     echo 0;
+7 }
+
+3.验证固定号码
+
+
+1 $call='02312345678';
+2 $preg_call='/^(0\d{2,3})?(\d{7,8})$/ims';
+3 if(preg_match($preg_call,$call)){
+4     echo 1;
+5 }else{
+6     echo 0;
+7 }
+
+4.验证只包含中英文的名字
+
+
+1 $name='dfdd';
+2 $preg_name='/^[\x{4e00}-\x{9fa5}]{2,10}$|^[a-zA-Z\s]*[a-zA-Z\s]{2,20}$/isu';
+3 if(preg_match($preg_name,$name)){
+4     echo 1;
+5 }else{
+6     echo 0;
+7 }
+
+5.验证身份证号码
+
+
+1 $IDCard='';
+2 $preg_card='/^\d{15}$)|(^\d{17}([0-9]|X)$/isu';
+3 if(preg_match($preg_card,$IDCard)){
+4     echo 1;
+5 }else{
+6     echo 0;
+7 }
+
+6.验证银行卡号
+
+
+1 $bankcard='';
+2 $preg_bankcard='/^(\d{15}|\d{16}|\d{19})$/isu';
+3 if(preg_match($preg_card,$bankcard)){
+4     echo 1;
+5 }else{
+6     echo 0;
+7 }
+
+7.验证QQ号码
+
+
+$QQ='';
+$preg_QQ='/^\d{5,12}$/isu';
+if(preg_match($preg_QQ,$QQ)){
+    echo 1;
+}else{
+    echo 0;
+}
+
+8.验证微信号
+
+
+1 $wechat='cdxcfvsd515d5___1';
+2 $preg_wechat='/^[_a-zA-Z0-9]{5,19}+$/isu';
+3 if(preg_match($preg_wechat,$wechat)){
+4     echo 1;
+5 }else{
+6     echo 0;
+7 }
+
+ 9.验证特殊符号(如需要验证其他字符，自行转义 "\X" 添加)
+
+
+1 $spacial='^%**Y*(';
+2 $preg_spacial="/\/|\~|\!|\@|\#|\\$|\%|\^|\&|\*|\(|\)|\+|\{|\}|\:|\<|\>|\?|\[|\]|\,|\/|\;|\\' | \`|\-|\=|\\\|\|/isu";
+3 if(preg_match($preg_spacial,$spacial)){
+4     echo 1;
+5 }else{
+6     echo 0;
+7 }
