@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>开会</title>
+</head>
+<body>
+	<form id="add_form">
+		<input type="text" name="title"><br/><br/>
+		<input type="file" name="img"/><br/><br/>
+		<input type="file" name="pic[]"/><br/><br/>
+		<input type="file" name="pic[]"/><br/><br/>
+		<input type="file" name="pic[]"/><br/><br/>
+		<input type="button" value="提交" id="submit">
+	</form>
+</body>
+<script type="text/javascript" src="__PUBLIC__/jquery-3.1.0.js"></script>
+<script type="text/javascript">
+$("#submit").click(function(){
+	var form = document.getElementById("add_form");
+	var formData = new FormData(form);
+	$.ajax({
+		url  : '__URL__/doAdd',
+		type : 'post',
+		data : formData,
+		dataType    : 'json',
+		contentType : false,
+        processData : false,
+        success     : function (data){
+        	if (data){
+        		alert('添加成功');
+        	}else{
+        		alert('添加失败');
+        	}
+        }
+	})
+})
+</script>
+</html>
