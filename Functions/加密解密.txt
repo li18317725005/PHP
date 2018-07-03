@@ -1,0 +1,33 @@
+/* 加密 */
+function addcoder($str, $signStr = '') {
+    $source = '/abA!c1dB#ef`2;@C<>g$h%iD_3jk\l^E:m}"4n|.o{F*p),5q(G-r[sH]6tuIv7w+Jxy8z9=K0';
+    $code = 'z=Ay%0Bx+1<>C$wDv^Eu\/2-,t3(F{srG4q_pH5*on|6I")m:l7.Jk]j8K}ih@gf9#ed!cb[a;`';
+    if (strlen($str) == 0)
+        return false;
+    for ($i = 0; $i < strlen($str); $i++) {
+        for ($j = 0; $j < strlen($source); $j++) {
+            if ($str[$i] == $source[$j]) {
+                $results .= $code[$j];
+                break;
+            }
+        }
+    }
+    return $results;
+}
+
+/* 解密 */
+function removecoder($str) {
+    $source = '/abA!c1dB#ef`2;@C<>g$h%iD_3jk\l^E:m}"4n|.o{F*p),5q(G-r[sH]6tuIv7w+Jxy8z9=K0';
+    $code = 'z=Ay%0Bx+1<>C$wDv^Eu\/2-,t3(F{srG4q_pH5*on|6I")m:l7.Jk]j8K}ih@gf9#ed!cb[a;`';
+    if (strlen($str) == 0)
+        return false;
+    for ($i = 0; $i < strlen($str); $i++) {
+        for ($j = 0; $j < strlen($code); $j++) {
+            if ($str[$i] == $code[$j]) {
+                $results .= $source[$j];
+                break;
+            }
+        }
+    }
+    return $results;
+}
