@@ -1,0 +1,125 @@
+//完全命令行操作
+建库     	CREATE DATABASE test DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+删库     	DROP DATABASE test;
+删表        DROP TABLE 表名;
+导入表      use test;
+			source 路径(如:/shop.sql)
+导出整库    mysqldump -u 用户名 -p 数据库名 > 导出的文件名
+导出单表	mysqldump -u 用户名 -p 数据库名 表名> 导出的文件名
+修改密码	UPDATE mysql.user SET password=PASSWORD('新密码') WHERE User='root';
+			FLUSH PRIVILEGES;
+增			INSERT INTO 表名 VALUES ("hyq","M");
+删			DELETE FROM 表名;
+改			UPDATE 表名 SET 字段名1='a',字段名2='b' WHERE 字段名3='c';
+查			SELECT * FROM 表名
+清空表		truncate table 表名
+
+//mysql新建账号分配权限
+1.  新建用户 (也可在在navicat创建 用户名/密码)
+	insert into mysql.user(Host,User,Password) values ('localhost','phplamp',password('1234'));
+	flush privileges;
+2. 	分配权限 (all privileges / select,update等)
+	use mysql
+	grant all privileges on mslj_web.* to "用户名"@"localhost";
+	flush privileges;
+3.  移除权限
+	revoke all privileges on jzgs.* from "artc"@"localhost";
+
+//TP使用mysql的事务(在model中使用):
+$this->startTrans();
+$this->commit();
+$this->rollback();
+
+//mysql格式化时间戳 (CURRENT_TIMESTAMP)
+SELECT FROM_UNIXTIME(1234567890, '%Y-%m-%d %H:%i:%S')
+
+//如果连接mysql用localhost不可以, 但是127.0.0.1可以:
+当主机填写为localhost时mysql会采用 unix domain socket连接
+当主机填写为127.0.0.1时mysql会采用tcp方式连接
+在my.cnf的[mysql]区段里添加  protocol=tcp
+
+-----------------------------------------------------------mysql技巧------------------------------------------------------------------------------
+//批量更新
+UPDATE mytable 
+    SET myfield = CASE id 
+        WHEN 1 THEN 'value'
+        WHEN 2 THEN 'value'
+        WHEN 3 THEN 'value'
+    END
+WHERE id IN (1,2,3);
+
+//mysql查询将空字段数据强制排在最前或最后
+case when 字段 = "" then 1 else 0 end, 字段 asc
+case when 字段 = "" then 0 else 1 end, 字段 desc
+
+//查询一个表中另一个表中不存在的记录
+select * from t_test1 t1 where (select count(1) as num from t_test2 t2 where t1.id = t2.n_id and t2.u_id = 1) = 0
+
+//随机获取一条或多条记录
+SELECT * FROM users WHERE userId >= ((SELECT MAX(userId) FROM users)-(SELECT MIN(userId) FROM users)) * RAND() + (SELECT MIN(userId) FROM users) LIMIT 1(或100)
+
+//随机查询另一个表中不存在的多条数据
+$sql = 'SELECT ' .$field. ' FROM ml_user u WHERE id >= ((SELECT MAX(id) FROM ml_user)-(SELECT MIN(id) FROM ml_user)) * RAND() + (SELECT MIN(id) FROM ml_user) AND status = 1 AND (SELECT COUNT(1) num FROM ml_friends f WHERE f.friend_id = u.id AND f.u_id = ' .$uid. ') = 0 LIMIT ' . $limit;
+
+//TP框架查询条件
+if ($_GET['name']) {
+	$where['_string'] = "(name like '%{$_GET['name']}%') OR (nickname like '%{$_GET['name']}%')";
+}
+if ($_GET['mobile']) {
+	$where['_complex']['username'] = $_GET['mobile'];
+	$where['_complex']['phone'] = $_GET['mobile'];
+	$where['_complex']['_logic'] = 'OR';
+}
+
+//查询方圆1公里内的数据
+select * from `location` where (
+acos(
+sin(([#latitude#]*3.1415)/180) * sin((latitude*3.1415)/180) + 
+cos(([#latitude#]*3.1415)/180) * cos((latitude*3.1415)/180) * cos(([#longitude#]*3.1415)/180 - (longitude*3.1415)/180)
+)*6370.996
+)<=1;
+------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+-----------------------------------------------------------pdo操作mysql-------------------------------------------------------------------------
+<?php
+header('Content-type:text/html; charset=utf-8');
+try {
+    $pdo = new PDO('mysql:host=localhost;port=3306;dbname=test_project;', 'root', 'root', array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES UTF8'));
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    exit('ERROR_MESSAGE --> ' . $e->getMessage());
+}
+
+//查询
+$id = 2;
+$sql = 'select * from t_test where id = :id';
+$stmt = $pdo->prepare($sql);
+$stmt->execute([':id' => $id]);
+while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+	echo "<pre>";
+	print_r($row);
+	echo "</pre>";
+}
+
+$uresult = $pdo->query("SELECT Name FROM City"); 
+if ($uresult) { 
+  while ($row = $uresult->fetch(PDO::FETCH_ASSOC)) { 
+    echo $row['Name'] . PHP_EOL; 
+  } 
+} 
+
+//增
+echo $pdo->exec('INSERT INTO t_test (username, password) VALUES (4, 4)');
+
+$sql = "INSERT INTO `t_test` (`username`, `password`) VALUES (:name, :pwd)";
+$stmt = $pdo->prepare($sql);
+$stmt->execute([':name' => 3, ':pwd' => 3]);
+echo $pdo->lastInsertId();
+
+//改
+echo $pdo->exec("UPDATE t_test SET ctime = '".date('Y-m-d H:i:s')."' WHERE id = 2");
+
+// 删
+echo $pdo->exec("DELETE FROM t_test WHERE id = 4");
+-----------------------------------------------------------------------------------------------------------------------------------------------

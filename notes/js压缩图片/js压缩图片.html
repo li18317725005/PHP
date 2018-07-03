@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>你好</title>
+</head>
+<!-- <css href="__PUBLIC__/a.css"> -->
+<body>
+<!-- <img id='img' src="__PUBLIC__/123.jpg"> -->
+<div><h2>HTML5 添加的最受欢迎的功能就是canvas元素。这个元素负责在页面中设定一个
+区域，然后就可以通过 JavaScript 动态地在这个区域中绘制图形。</h2>
+<p>getContext指定了您想要在画布上绘制的类型。当前唯一的合法值是 "2d".结合使用 drawImage()和其他方法，可以对图像进行各种基本操作。而操作的结果可以通过
+toDataURL()方法获得</p></div>
+<form id="file-img">
+
+	<input type="file" name="img" value="">
+
+</form>
+<script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script type="text/javascript">
+$('#file-img').find("input[type='file']").change(function(){
+	//var objUrl = getObjectURL(this.files[0]);
+	var size = this.files[0].size;
+	console.log();
+	var reader = new FileReader();
+	var path = $(this).val();
+    var Start = path.lastIndexOf(".");
+    var ext = path.substring(Start, path.length).toUpperCase();
+	reader.onload = function(e) {
+		if (ext != ".BMP" && ext != ".PNG" && ext != ".GIF" && ext != ".JPG" && ext != ".JPEG"){
+            fileSet.file_cont();
+            return false;
+        } else{
+		    //if (objUrl) {
+			    	var img = new Image();
+	 				img.src = e.target.result;
+					 img.onload = function(){
+					  var that = this;
+					  // 默认按比例压缩
+					  var w = that.width,h = that.height;
+					  var quality = 0.1;  /*默认图片质量为0.7*/
+					  var canvas = document.createElement('canvas');
+					  var ctx = canvas.getContext('2d');
+					  var anw = document.createAttribute("width");
+					  anw.nodeValue = w;
+					  var anh = document.createAttribute("height");
+					  anh.nodeValue = h;
+					  canvas.setAttributeNode(anw);
+					  canvas.setAttributeNode(anh);
+					  ctx.drawImage(that, 0, 0, w, h);
+					  var base64 = canvas.toDataURL('image/jpeg',quality );
+						$.post("{:U('upload_img')}",{'img':base64},function(res){
+							console.log(res);
+						});
+					 };
+			//};
+	    };
+	};
+	reader.readAsDataURL(document.querySelector("input[type=file]").files[0]);
+	$(this).val('');
+	return;
+});		
+</script>
+</script>
+</body>
+</html>
