@@ -1,0 +1,12 @@
+邮币卡开盘操作
+1.SELECT * FROM t_mycart WHERE trade_type = 0 AND orderDate = 20161105 AND type = "B": 不为空,登录后台(http://admin.lianshangsuo
+.com   账号: admin  密码:xiafan)-->纠错系统-->反票-->更正
+
+2.SELECT * FROM t_mycart WHERE orderDate = 20161105 AND type = "S”: 不为空, 打开ybk/lib/action/mobile/ceshiactio
+n.class.php文件，修改cedan_s()中的$where[‘orderDate’]=”XXX” 为昨日日期，并在浏览器中(www.lianshangsuo.com/?s=Mobile/Ceshi/cedan_s)运行; 如果为空, 不进行操作;
+
+3. 运行湖南联合收藏微交易客户端等待今日最新价格出现, 
+SELECT * from t_mycart where trade_type=1 and trade_price > 最新价格, 将查询结果的的orderNo字段改为1保存; 如果没有查询结果, 不用开盘
+
+4. 打开ybk/lib/action/mobile/ceshiaction.class.php文件，修改my_cart_auto_manage()中的  $money=XXX 把价格改为最新成交价格, 并在浏览器中运行, 网址:
+www.lianshangsuo.com/?s=Mobile/Ceshi/my_cart_auto_manage

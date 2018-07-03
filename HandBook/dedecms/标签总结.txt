@@ -1,0 +1,58 @@
+系统标签：
+{dede:global.cfg_basehost/}
+{dede:global.cfg_webname/}
+{dede:global.cfg_powerby/}版权信息
+{dede:global.cfg_keywords/}
+{dede:global.cfg_description/}
+{dede:global.cfg_beian/}
+{dede:global.cfg_templets_skin/}/style/
+{dede:global.cfg_templets_skin/}/js/
+{dede:global.cfg_templets_skin/}/images/
+{dede:global.cfg_indexurl/}主页链接
+{dede:global.cfg_indexname/}主页名称
+
+导航标签：
+{dede:channel type ='top' typeid=''  reid ='上级栏目id'}
+<a href="[field:typelink/]" target="_self" class="menumain_dolphin">[field:typename/]</a>
+{/dede:channel}	
+
+
+文章详细页标签
+{dede:field.title/}//标题
+{dede:field.pubdate function="MyDate('Y-m-d H:i',@me)"/}发布时间
+{dede:field.source/}来源
+{dede:field.writer/}作者
+<script src="{dede:field name='phpurl'/}/count.php?view=yes&aid={dede:field name='id'/}&mid={dede:field name='mid'/}"type='text/javascript' language="javascript"></script>点击数
+{dede:field.body/}内容
+
+{dede:prenext get='pre'/}上一篇
+{dede:prenext get='next'/}下一篇
+文章列表标签
+{dede:list pagesize ='5'}
+[field:title/] [field:arcurl/][field:pubdate function="MyDate('Y-m-d',@me)"/]
+{/dede:list}
+分页：
+<div class="dede_pages"><ul class=pagelist>{dede:pagelist listitem="info,index,end,pre,next,pageno,option"listsize="5"/}</ul></div>
+相关文章
+{dede:likearticle mytypeid='1' titlelen='20' row='5'}
+
+
+{/dede:likearticle}
+
+当前位置：
+{dede:field name='position'/}
+栏目名称：
+{dede:field name='typename'/}
+栏目树：
+{dede:cattree catid='3' showall=''/}
+关于我们：
+{dede:channelartlist typeid="0,1"}
+{dede:field name='content'/}
+{/dede:channelartlist}
+
+
+
+
+
+
+
