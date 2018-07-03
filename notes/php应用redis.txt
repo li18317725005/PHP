@@ -1,0 +1,18 @@
+<?php
+/*$redis = new Redis();
+$redis->connect('127.0.0.1', 6379);
+$redis->auth('123456');
+echo $redis->get('name');
+*/
+@ini_set("session.save_handler", "redis");  
+@ini_set("session.save_path", 'tcp://127.0.0.1:6379?auth=123456');
+
+session_start();  
+
+$_SESSION['test1'] = '1';
+
+$redis = new Redis();
+$redis->connect('127.0.0.1', 6379);
+$redis->auth('123456');
+;
+var_dump($_SESSION['test1']);

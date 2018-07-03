@@ -1,0 +1,14 @@
+$example_name = 'XXX文件.xxx后缀';
+$file_xls = './路径';
+
+header('Content-Description: File Transfer');
+header('Content-Type: application/octet-stream');
+header('Content-Disposition: attachment; filename='.mb_convert_encoding($example_name,"gb2312","utf-8"));  //转换文件名的编码
+header('Content-Transfer-Encoding: binary');
+header('Expires: 0');
+header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+header('Pragma: public');
+header('Content-Length: ' . filesize($file_xls));
+ob_clean();
+flush();
+readfile($file_xls);

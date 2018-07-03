@@ -1,0 +1,11 @@
+$user_agent = $_SERVER['HTTP_USER_AGENT'];
+        if (strpos($user_agent, 'MicroMessenger') !== false) { //Î¢ÐÅä¯ÀÀÆ÷·ÃÎÊ
+            //ÍøÒ³ÊÚÈ¨
+            $redirect_url ='http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];
+            $this->authorize($redirect_url);
+        }else{
+            //ÅÐ¶ÏÊÇµçÄÔ¶ËµÇÂ½»¹ÊÇÊÖ»ú¶ËµÇÂ¼
+            if (!sp_is_mobile()){ //µçÄÔ¶Ë
+                $this->redirect('PCweb/Comiket/index');
+            }
+        }

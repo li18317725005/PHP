@@ -1,0 +1,25 @@
+function filtration($str){
+    $str = preg_replace_callback('/[\xf0-\xf7].{3}/', function($r) { return '@E' . base64_encode($r[0]);},$str);
+    $countt=substr_count($str,"@");
+    for ($i=0; $i < $countt; $i++) {
+        $c = stripos($str,"@");
+        $str=substr($str,0,$c).'?'.substr($str,$c+10,strlen($str)-1);
+    }
+    $str = preg_replace_callback('/@E(.{6}==)/', function($r) {return base64_decode($r[1]);}, $str);
+    return $str;
+}
+
+
+function jsonName($str) {
+    if($str){
+        $tmpStr = json_encode($str);
+        $tmpStr2 = preg_replace("#(\\\ud[0-9a-f]{3})#ie","",$tmpStr);
+        $return = json_decode($tmpStr2);
+        if(!$return){
+            return jsonName($return);
+        }
+    }else{
+        $return = 'Î¢ÐÅÓÃ»§-'.time();
+    }    
+    return $return;
+}

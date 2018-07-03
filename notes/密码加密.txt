@@ -1,0 +1,15 @@
+//ÑÎÖµ
+function generateHashWithSalt($password) {
+  $intermediateSalt = md5(uniqid(rand(), true));
+  $salt = substr($intermediateSalt, 0, 6); 
+  return hash("sha256", $password . $salt);
+}
+
+
+//Bcrypt
+function generateHash($password) {
+  if (defined("CRYPT_BLOWFISH") && CRYPT_BLOWFISH) {
+    $salt = '$2y$11$' . substr(md5(uniqid(rand(), true)), 0, 22);
+    return crypt($password, $salt);
+  }
+}

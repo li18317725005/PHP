@@ -1,0 +1,20 @@
+<?php
+header('Content-type: text/html; charset=utf-8');
+//生成随机的IP
+$ip = rand(101, 255).'.' . rand(1, 255).'.' . rand(1, 255).'.' . rand(1, 255);
+//定义模拟IP
+$CIp = 'CLIENT-IP:'.$ip;
+$XIp = 'X-FORWARDED-FOR:'.$ip;
+//设置刷票目标地址和网站referer地址
+$url = '刷票目标地址';
+$referer = '网站referer地址';
+//使用curl提交
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $url); 
+curl_setopt($ch, CURLOPT_HTTPHEADER, array($xforwarded, $CIp));  //伪造提交请求IP地址
+curl_setopt($ch, CURLOPT_REFERER, $referer); //伪造刷票来源
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+curl_setopt($ch, CURLOPT_HEADER, 0);
+$result = curl_exec($ch);
+curl_close($ch);
+echo $result;

@@ -1,0 +1,27 @@
+/**
+此函数的作用是反转中文字符串
+mb_strlen() 获取字符的长度
+mb_substr() 获取字符的单个元素
+krsort() 按照键值逆序排序数组,对关联数组按照键名进行降序排序
+Array ( [8] => 国 [7] => 中 [6] => h [5] => s [4] => i [3] => l [2] => g [1] => n [0] => E ) English中国->国中hsilgnE
+(ksort()对关联数组按照键名进行升序排序)
+implode() 将数组拼接为字符串
+explode() 使用字符串分隔字符串
+ */
+function str_rev_gb($str){
+  //判断输入的是不是utf8类型的字符，否则退出
+  if(!is_string($str)||!mb_check_encoding($str,'UTF-8')){
+    exit("输入类型不是UTF8类型的字符串");
+  }
+  $array=array();
+  //将字符串存入数组
+  $l=mb_strlen($str,'UTF-8');//在mb_strlen计算时，选定内码为UTF8，则会将一个中文字符当作长度1来计算
+  for($i=0;$i<$l;$i++){
+    $array[]=mb_substr($str,$i,1,'UTF-8');
+  }
+  //反转字符串
+  krsort($array);
+  //拼接字符串
+  $string=implode($array);
+  return $string;
+}

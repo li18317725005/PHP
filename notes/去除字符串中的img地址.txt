@@ -1,0 +1,2 @@
+preg_match_all("/(href|src)=([\"|']?)([^\"'>]+.(jpg|JPG|jpeg|JPEG|gif|GIF|png|PNG))/i", $str, $match);
+P($match[3]);

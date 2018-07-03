@@ -1,0 +1,2 @@
+$script = "<script type='text/javascript'>";
+$result['data']['campaign'][0]['describe'] =  substr($result['data']['campaign'][0]['describe'], 0, strpos($result['data']['campaign'][0]['describe'], $script));

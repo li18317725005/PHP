@@ -1,0 +1,77 @@
+1.获取ip
+get_client_ip(0, true);
+
+function getIp(){
+	$realip = '';  
+	$unknown = 'unknown';  
+	if (isset($_SERVER)){  
+		if(isset($_SERVER['HTTP_X_FORWARDED_FOR']) && !empty($_SERVER['HTTP_X_FORWARDED_FOR']) && strcasecmp($_SERVER['HTTP_X_FORWARDED_FOR'], $unknown)){  
+			$arr = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);  
+			foreach($arr as $ip){  
+				$ip = trim($ip);  
+				if ($ip != 'unknown'){  
+					$realip = $ip;  
+					break;  
+				}  
+			}  
+		}else if(isset($_SERVER['HTTP_CLIENT_IP']) && !empty($_SERVER['HTTP_CLIENT_IP']) && strcasecmp($_SERVER['HTTP_CLIENT_IP'], $unknown)){  
+			$realip = $_SERVER['HTTP_CLIENT_IP'];  
+		}else if(isset($_SERVER['REMOTE_ADDR']) && !empty($_SERVER['REMOTE_ADDR']) && strcasecmp($_SERVER['REMOTE_ADDR'], $unknown)){  
+			$realip = $_SERVER['REMOTE_ADDR'];  
+		}else{  
+			$realip = $unknown;  
+		}  
+	}else{  
+		if(getenv('HTTP_X_FORWARDED_FOR') && strcasecmp(getenv('HTTP_X_FORWARDED_FOR'), $unknown)){  
+			$realip = getenv("HTTP_X_FORWARDED_FOR");  
+		}else if(getenv('HTTP_CLIENT_IP') && strcasecmp(getenv('HTTP_CLIENT_IP'), $unknown)){  
+			$realip = getenv("HTTP_CLIENT_IP");  
+		}else if(getenv('REMOTE_ADDR') && strcasecmp(getenv('REMOTE_ADDR'), $unknown)){  
+			$realip = getenv("REMOTE_ADDR");  
+		}else{  
+			$realip = $unknown;  
+		}  
+	}  
+	$realip = preg_match("/[\d\.]{7,15}/", $realip, $matches) ? $matches[0] : $unknown;  
+	return $realip;  
+}
+
+2.根据ip获取城市信息
+function sinaCityNameByIp($ip) {
+    $url = 'http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=json&ip=' . $ip;
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_ENCODING, 'utf8');
+    curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); // 获取数据返回
+    $location = curl_exec($ch);
+    $location = json_decode($location);
+    curl_close($ch);
+    $loc = "";
+    if ($location === FALSE)
+        return "";
+    return $location->city;
+}
+
+3.根据经纬度获取城市信息
+function baiduCityNameByjw($jw) {
+    $url = 'http://api.map.baidu.com/geocoder/v2/?ak=YgIVQRyC8SiN8UB6glzAy648fVIzIfpP&location='.$jw.'&output=json&pois=0';
+    $resultJson = file_get_contents($url);
+    $result = json_decode($resultJson, true);
+    return $result['result']['addressComponent']['city'] ?: '郑州市';
+}
+
+4. js根据经纬度获取城市信息
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=lg1Zp1iRsEGtrXkGHLYwRsLk"></script>
+
+function getCity(j,w){
+	var point = new BMap.Point(j,w);
+	var gc = new BMap.Geocoder(); 
+	gc.getLocation(point, function(rs) {
+			var addComp = rs.addressComponents;
+			var name;
+			if(addComp.city.length > 1){
+				name = addComp.city;
+			}
+		cityName(name);
+	});
+}

@@ -1,0 +1,17 @@
+/**
+ * App签名验证
+ * @param type $type
+ * @param type $data
+ * @param type $time
+ * @return type
+ */
+public function appSign($type, $data, $time) {
+	ksort($data);
+	$str1 = '';
+	foreach ($data as $v) {
+		$str1 .= $v;
+	}
+	$str2 = md5($str1);
+	$str3 = '秘钥字符串' . $str2 . $time . $type;
+	return md5($str);
+}

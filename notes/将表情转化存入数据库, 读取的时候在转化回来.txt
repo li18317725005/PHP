@@ -1,0 +1,5 @@
+mysql字段类型为utf8
+入库前，先将表情转化成指定字符
+$text = preg_replace_callback('/[\xf0-\xf7].{3}/', function($r) { return '@E' . base64_encode($r[0]);}, $text);
+读取时，再将指定字符转化成表情
+$text = preg_replace_callback('/@E(.{6}==)/', function($r) {return base64_decode($r[1]);}, $text);

@@ -1,0 +1,31 @@
+<?php
+/**
+ * 抽奖概率计算
+ * @param  arr $jp      二为数组, 奖品概率及奖品等级
+ * @param  str $glname  $jp数组中概率的键值
+ * @return arr 中奖结果
+ */
+function get_zj($jp, $glname = 'gl'){
+  $sum = 0;
+  foreach ($jp as $k => $v){
+    $sum += $v[$glname];
+  }
+
+  $R = rand(1, $sum); //获取随机数
+
+  foreach ($jp as $k => $v){
+    if ($R <= $v[$glname]){
+      return $v;
+    }
+    $R = $R - $v[$glname];
+  }
+}
+
+$jp = array();
+$jp[] = array('gl' => 1, 'title' => '一等奖');
+$jp[] = array('gl' => 1, 'title' => '二等奖');
+$jp[] = array('gl' => 1, 'title' => '三等奖');
+$jp[] = array('gl' => 97, 'title' => '未中奖');
+
+$zj = get_zj($jp);
+var_dump($zj);

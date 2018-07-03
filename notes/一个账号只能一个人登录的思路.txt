@@ -1,0 +1,11 @@
+1,用户在电脑A登录,session信息存放在redis当中，并将session_id存到mysql数据库中。
+
+2,同一用户在电脑B登录，验证完用户名和密码后，将该用户信息从数据库读出，取得用户在电脑A登录的session_id，然后在到redis中验证session是否过期。
+
+3,如果过期，不用openfire推送提示信息。如果没有过期，php利用openfire推送消息后，在将redis中用户在电脑A中登录的session删除掉，删除后，在将用户在电脑B登录的个人信息放到session中，并将电脑B登录的session_id更新到数据库中，在这里一定要先发送推送，然后在清空session，不然用户在电脑A收不到xmpp发过来的消息。
+
+注意：
+
+openfire是java cms的一种，自身有数据库，您创建的用户表根openfire自带的用户表之间要建立某种联系（如:手机号，邮箱等），方便信息推送。
+
+同一session_id肯定是在相同媒介上登录的,这个时候，也不用更新数据库和推送消息

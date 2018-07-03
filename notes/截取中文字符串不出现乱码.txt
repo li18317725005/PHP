@@ -1,0 +1,16 @@
+$text = "1ª∂”≠∑√Œ sina–¬¿À≤•øÕ";
+$value = substr($text, 0, 18);
+$value_length = strlen($value);
+$value_count = 0;
+for ($i = 0; $i < $value_length; $i++)
+{
+  if (ord($value{$i}) > 127)
+  {
+    $value_count++;
+  }
+}
+if ($value_count % 2 != 0)
+{
+  $value = substr($text, 0, $value_length - 1);
+}
+echo $value."<br/>";

@@ -1,0 +1,15 @@
+<?php
+header("Content-type:text/html;charset=utf-8");
+$str = "Àîº£½­";
+function mbStringToArrAy($str, $charset="utf-8"){
+	$strlen = mb_strlen($str);
+	while ($strlen){
+		$array[] = mb_substr($str, 0, 1, $charset);
+		$str = mb_substr($str, 1, $strlen, $charset);
+		$strlen = mb_strlen($str);
+	}
+	return $array;
+}
+
+$arr = mbStringToArrAy($str);
+var_dump($arr);

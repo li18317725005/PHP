@@ -1,0 +1,69 @@
+1、使用CURL进行信息伪造
+$ch = curl_init();
+ 
+curl_setopt($ch, CURLOPT_URL, "http://localhost/2.php");
+
+curl_setopt($ch, CURLOPT_HTTPHEADER, array('X-FORWARDED-FOR:8.8.8.8', 'CLIENT-IP:8.8.8.8'));
+
+curl_setopt($ch, CURLOPT_REFERER, "http://localhost/ ");
+
+curl_setopt($ch, CURLOPT_HEADER, 1);
+
+curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (compatible; MSIE 6.0; Windows NT 5.0)");
+
+$out = curl_exec($ch); 
+
+curl_close($ch);
+
+2、验证码：采用非常复杂的验证码
+
+确切的说验证码的出现不是针对于人，而是针对于机器。通过复杂度和识别难易度的控制来阻拦掉一部分刷票机，从而减少刷票的发生。但随着软件技术、识别技术的发展越来越多的验证码面对着先进的刷票软件也失去了其防范的作用、但是专业刷票机可以攻破。如果不用验证码，投票基本就歇菜了，验证码获取方式，采用异步加载，即点击输入框时，才去请求，投票成功后，删除验证码的 Session
+
+3、限时投票
+
+比如：从早8点至晚23 点
+
+4、设置投票间隔
+
+用户投票后，需要隔多长时间才能继续投。
+
+很多投票站点基本上都有这个限制，但是对于更改 IP的攻击，就没办法了
+
+5、投票结果展示：延迟展示，友好展示
+
+页面上投票，JS 立马加1，但是刷新页面，不一定立马展示最新投票结果，返回状态给页面（感谢您的投票！或者 投票成功！至于有没有成功，另说了！）
+
+6、扣量逻辑：常见于一些软件评选之类的投票
+
+这是个杀手锏，后台跑脚本实时监控异常增长（刷票）的项，然后实施扣量逻辑
+
+即对于这个项，投 10 票才算一票
+
+7、Cookie：常用的手段。比较低级
+
+投票后，在客户端写入 Cookie，下次投票时判断 Cookie 是否存在
+
+但是，这种方式非常容易攻破，因为 Cookie 可删除
+
+8、加密选项 ID：对一些投票选项的ID，进行随机加密
+
+加密算法，加Salt，并且设置有效时间，比如5分钟内
+
+服务器端进行解密并且验证
+
+9、nginx限制链接数
+
+ngx_http_limit_conn_module
+
+ngx_http_limit_req_module
+
+nginx_limit_speed_module
+
+可以使用这三个模块来限制，不过这不是一个好的解决方法
+
+10、iptables限制
+
+/sbin/iptables -A INPUT -p tcp --dport 80 --syn -m recent --name webpool --rcheck --seconds 60 --hitcount 10 -j DROP
+/sbin/iptables -A INPUT -p tcp --dport 80 --syn -m recent --name webpool --set -j ACCEPT
+/sbin/iptables -t filter -A INPUT -p tcp --dport 80 --tcp-flags FIN,SYN,RST,ACK SYN -m connlimit --connlimit-above 10 --connlimit-mask
+ 32 -j REJECT

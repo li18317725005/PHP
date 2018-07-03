@@ -1,0 +1,20 @@
+//分隔手机号
+$str = '18317725005';
+preg_match('/([\d]{3})([\d]{4})([\d]{4})/', $str,$match);  
+unset($match[0]);  
+echo implode(' ', $match); 
+
+
+//分隔函数
+$str = '18317725005';
+function split_num($str, $is_strrev=false, $length=4, $flag=" "){
+    if ($is_strrev){
+        $new_str=strrev($str);
+        $new_str= chunk_split($new_str, $length, $flag);
+        return strrev(trim($new_str, ','));
+    }else{
+        $new_str= chunk_split($str, $length, $flag);
+        return trim($new_str, ',');
+    }
+}
+echo split_num($str, true);

@@ -1,0 +1,16 @@
+if ($info['type'] == 1) { //随机红包
+	if ($info['residue_money'] / $info['residue_number'] <= 0.01) { //总额除以数量如果<=0.01则平分金额(小于的情况其实不存在)
+		$money = $info['residue_money'] / $info['residue_number'];
+	} elseif ($info['residue_number'] == 1) { //如果是最后一个红包, 送出所有余额
+		$money = $info['residue_money'];
+	} else {
+		$total = $info['residue_money'];
+		$num = $info['residue_number'];
+		$min = 0.01; //最小金额
+		$safeMoney = $total - $num * $min; //在保证每人最少0.01元之后余下的钱
+		$max = ($total / $num) + ($safeMoney / $num);
+		$money = mt_rand($min * 100, $max * 100) / 100;
+	}
+} else { //普通红包
+	$money = $info['each_money'];
+}

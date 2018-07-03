@@ -1,0 +1,11 @@
+$zip_path = './other/test.zip';//压缩包实际路径
+$zip = zip_open($zip_path);//利用zip_open函数打开压缩包
+while ($re = zip_read($zip)) {//读依次读取包中的文件
+ if (!zip_entry_filesize($re)) break;//如果文件大小为0退出操作
+ $entry_zp = zip_entry_open($zip,$re,'rb');//读取包中文件
+ $ext = pathinfo(zip_entry_name ($re),PATHINFO_EXTENSION);//获取图片文件扩展名
+ $buf = zip_entry_read($re,zip_entry_filesize($re));//读取文件二进制数据
+ echo sprintf('<img src="data:image/%s;base64,%s">', $ext, base64_encode($buf));//利用base64_encode函数转换读取到的二进制数据并输入输出到页面中
+ zip_entry_close($re);//关闭打开的压缩包中的文件
+}
+zip_close($zip);//关闭压缩包文件
