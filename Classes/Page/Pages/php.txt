@@ -1,0 +1,13 @@
+/**
+ * 分页
+ * @param  int  $total      总记录数
+ * @param  int  $listRows   每页显示记录数
+ * @param  string  $params  参数
+ * @return [type]           [description]
+ */
+function getPage($total, $listRows, $params){
+	$page = new \Think\Pages($total, $listRows, $params);
+	$pageArr['pageStr'] = $page->fpage(array(2, 3, 4, 6, 7));
+	$pageArr['offset']  = $page->offset;
+	return $pageArr;
+}
