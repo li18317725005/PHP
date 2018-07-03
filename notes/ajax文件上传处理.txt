@@ -1,0 +1,29 @@
+var form = document.getElementById("form_activity");
+var formData = new FormData(form);
+
+
+$.ajax({
+        url  : "",
+        type : 'post',
+        data : formData,
+        dataType : 'json',
+        contentType : false,
+        processData : false,
+        success  : function (data){
+
+        }
+    })
+
+
+//当前操作的是第几个
+var i = $(".del").index(this);
+var now = i + 1;
+
+//清除file内容
+var obj = document.getElementById('pic1'); 
+obj.outerHTML = obj.outerHTML;
+
+//jquery清除file内容
+var file = $("#file_uploade");   
+file.after(file.clone());   
+file.remove();  
